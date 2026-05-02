@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/SchedulingBackend/">
+    <Project Path="SchedulingBackend/Scheduling.API/Scheduling.API.csproj" />
+  </Folder>
+</Solution>
