@@ -19,6 +19,10 @@ public class Appointment
     public Guid ServiceOfferingId { get; private set; }
     public AppointmentStatus Status { get; private set; }
 
+    public Customer? Customer { get; private set; }
+    public Staff? Staff { get; private set; }
+    public ServiceOffering? ServiceOffering { get; private set; }
+
     private Appointment() { }
 
     public Appointment(

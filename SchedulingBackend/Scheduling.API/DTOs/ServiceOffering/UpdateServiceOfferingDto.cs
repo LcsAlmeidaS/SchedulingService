@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Scheduling.API.DTOs.ServiceOffering;
 
-public record CreateServiceOfferingDto(
+public record UpdateServiceOfferingDto(
     [Required][MaxLength(128)] string Name,
     [Required][Range(0, double.MaxValue)] decimal Price,
     [Required][Range(1, int.MaxValue)] int DurationInMinutes,
