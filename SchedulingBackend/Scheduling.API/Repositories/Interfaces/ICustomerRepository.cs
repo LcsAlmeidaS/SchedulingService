@@ -1,6 +1,6 @@
 using Scheduling.API.Entities;
 
-namespace Scheduling.API.Repositories;
+namespace Scheduling.API.Repositories.Interfaces;
 
 public interface ICustomerRepository : IRepository<Customer>
 {
