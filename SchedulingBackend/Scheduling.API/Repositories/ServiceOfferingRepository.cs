@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scheduling.API.Context;
 using Scheduling.API.Entities;
+using Scheduling.API.Repositories.Interfaces;
 
 namespace Scheduling.API.Repositories;
 
