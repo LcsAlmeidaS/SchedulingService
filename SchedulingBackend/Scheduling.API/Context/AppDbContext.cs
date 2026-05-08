@@ -69,17 +69,17 @@ public class AppDbContext : DbContext
             entity.HasKey(a => a.Id);
             entity.Property(a => a.Status).HasConversion<string>();
 
-            entity.HasOne<Customer>()
+            entity.HasOne<Customer>(a => a.Customer)
                 .WithMany(c => c.Appointments)
                 .HasForeignKey(a => a.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne<Staff>()
+            entity.HasOne<Staff>(a => a.Staff)
                 .WithMany()
                 .HasForeignKey(a => a.StaffId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne<ServiceOffering>()
+            entity.HasOne<ServiceOffering>(a => a.ServiceOffering)
                 .WithMany()
                 .HasForeignKey(a => a.ServiceOfferingId)
                 .OnDelete(DeleteBehavior.Restrict);
