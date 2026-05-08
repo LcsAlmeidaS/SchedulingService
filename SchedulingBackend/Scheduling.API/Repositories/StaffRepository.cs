@@ -31,4 +31,13 @@ public class StaffRepository : Repository<Staff>, IStaffRepository
             .Include(s => s.BreakTimes)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
+
+    public async Task<IEnumerable<Staff>> GetAllActiveWithScheduleAsync()
+    {
+        return await _context.Staff
+            .Include(s => s.WorkingHours)
+            .Include(s => s.BreakTimes)
+            .Where(s => s.IsActive)
+            .ToListAsync();
+    }
 }

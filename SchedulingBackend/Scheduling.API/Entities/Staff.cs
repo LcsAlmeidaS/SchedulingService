@@ -91,6 +91,15 @@ public class Staff
         _breakTimes.Remove(entry);
     }
 
+    public void UpdateContactInfo(string email, string phone)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            throw new ArgumentException("Email cannot be empty.");
+
+        Email = email;
+        Phone = phone;
+    }
+
     public void Deactivate() => IsActive = false;
     public void Activate() => IsActive = true;
 }

@@ -9,6 +9,15 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
 {
     public AppointmentRepository(AppDbContext context) : base(context) { }
 
+    public async Task<Appointment?> GetByIdWithDetailsAsync(Guid id)
+    {
+        return await _context.Appointments
+            .Include(a => a.Customer)
+            .Include(a => a.Staff)
+            .Include(a => a.ServiceOffering)
+            .FirstOrDefaultAsync(a => a.Id == id);
+    }
+
     public async Task<IEnumerable<Appointment>> GetAppointmentsByStaffOnDateAsync(Guid staffId, DateOnly date)
     {
         var startOfDay = date.ToDateTime(TimeOnly.MinValue);
