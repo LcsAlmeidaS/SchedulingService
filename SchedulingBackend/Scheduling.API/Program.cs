@@ -1,11 +1,48 @@
+using Microsoft.EntityFrameworkCore;
+using Scheduling.API.Context;
+using Scheduling.API.Repositories;
+using Scheduling.API.Repositories.Interfaces;
+using Scheduling.API.Services;
+using Scheduling.API.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+#endregion
+
+#region Repositories
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IServiceOfferingRepository, ServiceOfferingRepository>();
+#endregion
+
+#region Services
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
+#endregion
+
+#region Web
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+#endregion
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region Middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
+app.MapControllers();
+#endregion
 
 app.Run();
