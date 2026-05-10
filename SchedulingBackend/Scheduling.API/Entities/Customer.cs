@@ -11,7 +11,7 @@ public class Customer
 
     public ICollection<Appointment> Appointments { get; private set; } = new List<Appointment>();
 
-    private Customer() { }
+    private Customer() { Name = string.Empty; Email = string.Empty; Phone = string.Empty; }
 
     public Customer(string name, string email, string phone)
     {
