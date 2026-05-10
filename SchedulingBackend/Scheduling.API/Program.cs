@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scheduling.API.Context;
+using Scheduling.API.Infrastructure.Json;
 using Scheduling.API.Repositories;
 using Scheduling.API.Repositories.Interfaces;
 using Scheduling.API.Services;
@@ -27,7 +28,9 @@ builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 #endregion
 
 #region Web
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
