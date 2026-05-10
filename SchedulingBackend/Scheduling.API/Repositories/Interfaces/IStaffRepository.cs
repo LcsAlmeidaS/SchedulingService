@@ -8,4 +8,6 @@ public interface IStaffRepository : IRepository<Staff>
     Task<IEnumerable<Staff>> GetActiveStaffAsync();
     Task<Staff?> GetWithScheduleAsync(Guid id);
     Task<IEnumerable<Staff>> GetAllActiveWithScheduleAsync();
+    Task AddWorkingHoursAsync(WorkingHours workingHours);
+    Task AddBreakTimeAsync(BreakTime breakTime);
 }
