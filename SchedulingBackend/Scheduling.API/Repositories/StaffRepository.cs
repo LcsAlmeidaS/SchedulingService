@@ -40,4 +40,10 @@ public class StaffRepository : Repository<Staff>, IStaffRepository
             .Where(s => s.IsActive)
             .ToListAsync();
     }
+
+    public async Task AddWorkingHoursAsync(WorkingHours workingHours)
+        => await _context.WorkingHours.AddAsync(workingHours);
+
+    public async Task AddBreakTimeAsync(BreakTime breakTime)
+        => await _context.BreakTimes.AddAsync(breakTime);
 }
