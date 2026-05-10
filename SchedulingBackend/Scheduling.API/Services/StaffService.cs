@@ -63,6 +63,7 @@ public class StaffService : IStaffService
 
         var workingHours = new WorkingHours(staffId, dto.DayOfWeek, dto.StartTime, dto.EndTime);
         staff.AddWorkingHours(workingHours);
+        await _staffRepository.AddWorkingHoursAsync(workingHours);
 
         await _staffRepository.SaveChangesAsync();
         return staff.ToDto();
@@ -75,12 +76,18 @@ public class StaffService : IStaffService
 
         var breakTime = new BreakTime(staffId, dto.DayOfWeek, dto.StartTime, dto.EndTime);
         staff.AddBreakTime(breakTime);
+        await _staffRepository.AddBreakTimeAsync(breakTime);
 
         await _staffRepository.SaveChangesAsync();
         return staff.ToDto();
     }
+
     public async Task DeactivateAsync(Guid id)
     {
+        var staff = await _staffRepository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Staff {id} not found.");
 
+        staff.Deactivate();
+        await _staffRepository.SaveChangesAsync();
     }
 }
