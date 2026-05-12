@@ -51,7 +51,7 @@ public class StaffService : IStaffService
         if (emailOwner is not null && emailOwner.Id != id)
             throw new InvalidOperationException("This email is already in use by another staff.");
 
-        staff.UpdateContactInfo(dto.Email, dto.Phone ?? string.Empty);
+        staff.Update(dto.Name, dto.Email, dto.Phone);
         await _staffRepository.SaveChangesAsync();
         return staff.ToDto();
     }
