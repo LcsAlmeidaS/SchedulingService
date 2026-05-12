@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Scheduling.API.DTOs.Staff;
-using Scheduling.API.Services.Interfaces;
+using Scheduling.Application.DTOs.Staff;
+using Scheduling.Application.Services.Interfaces;
 
 namespace Scheduling.API.Controllers;
 

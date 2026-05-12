@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Scheduling.API.DTOs.Availability;
-using Scheduling.API.Services.Interfaces;
+using Scheduling.Application.DTOs.Availability;
+using Scheduling.Application.Services.Interfaces;
 
 namespace Scheduling.API.Controllers;
 
@@ -21,5 +21,4 @@ public class AvailabilityController : ControllerBase
         var result = await _availabilityService.GetAvailableSlotsAsync(dto);
         return Ok(result);
     }
-
 }

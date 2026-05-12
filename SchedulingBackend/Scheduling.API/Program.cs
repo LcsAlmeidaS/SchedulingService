@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Scheduling.API.Context;
 using Scheduling.API.Infrastructure.Json;
-using Scheduling.API.Repositories;
-using Scheduling.API.Repositories.Interfaces;
-using Scheduling.API.Services;
-using Scheduling.API.Services.Interfaces;
+using Scheduling.API.Infrastructure.Middleware;
+using Scheduling.Application.Repositories;
+using Scheduling.Application.Services;
+using Scheduling.Application.Services.Interfaces;
+using Scheduling.Infrastructure.Context;
+using Scheduling.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 #endregion
