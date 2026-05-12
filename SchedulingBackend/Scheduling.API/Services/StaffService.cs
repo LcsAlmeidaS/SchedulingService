@@ -1,18 +1,20 @@
-using Scheduling.API.Repositories.Interfaces;
+using Scheduling.API.DTOs.Mappings;
 using Scheduling.API.DTOs.Staff;
 using Scheduling.API.Entities;
-using Scheduling.API.DTOs.Mappings;
+using Scheduling.API.Repositories.Interfaces;
 using Scheduling.API.Services.Interfaces;
 
-namespace Scheduling.API.Repositories;
+namespace Scheduling.API.Services;
 
 public class StaffService : IStaffService
 {
-    public readonly IStaffRepository _staffRepository;
+    private readonly IStaffRepository _staffRepository;
+    private readonly IAppointmentRepository _appointmentRepository;
 
-    public StaffService(IStaffRepository staffRepository)
+    public StaffService(IStaffRepository staffRepository, IAppointmentRepository appointmentRepository)
     {
         _staffRepository = staffRepository;
+        _appointmentRepository = appointmentRepository;
     }
 
     public async Task<StaffResponseDto> CreateAsync(CreateStaffDto dto)
@@ -30,16 +32,14 @@ public class StaffService : IStaffService
     public async Task<StaffResponseDto> GetByIdAsync(Guid id)
     {
         var staff = await _staffRepository.GetByIdAsync(id)
-            ?? throw new KeyNotFoundException($"Staff with email '{id}' not found.");
-
+            ?? throw new KeyNotFoundException($"Staff {id} not found.");
         return staff.ToDto();
     }
 
     public async Task<IEnumerable<StaffResponseDto>> GetActiveAsync()
     {
-        var staffs = await _staffRepository.GetActiveStaffAsync();
-
-        return staffs.Select(s => s.ToDto());
+        var staffList = await _staffRepository.GetActiveStaffAsync();
+        return staffList.Select(s => s.ToDto());
     }
 
     public async Task<StaffResponseDto> UpdateAsync(Guid id, UpdateStaffDto dto)
@@ -89,5 +89,42 @@ public class StaffService : IStaffService
 
         staff.Deactivate();
         await _staffRepository.SaveChangesAsync();
+    }
+
+    public async Task<StaffAppointmentSummaryDto> GetAppointmentSummaryAsync(Guid staffId, DateOnly? from = null, DateOnly? to = null)
+    {
+        var staff = await _staffRepository.GetByIdAsync(staffId)
+            ?? throw new KeyNotFoundException($"Staff {staffId} not found.");
+
+        var toDate = to ?? DateOnly.FromDateTime(DateTime.UtcNow);
+        var fromDate = from ?? toDate.AddDays(-30);
+
+        var appointments = await _appointmentRepository.GetCompletedByStaffInPeriodAsync(
+            staffId,
+            fromDate.ToDateTime(TimeOnly.MinValue),
+            toDate.ToDateTime(TimeOnly.MaxValue));
+
+        var completedList = appointments.ToList();
+        var totalHours = Math.Round(completedList.Sum(a => (a.EndTime - a.StartTime).TotalHours), 2);
+
+        return new StaffAppointmentSummaryDto(staffId, staff.Name, completedList.Count, totalHours, fromDate, toDate);
+    }
+
+    public async Task<StaffScheduledHoursDto> GetScheduledHoursAsync(Guid staffId, DateOnly? from = null, DateOnly? to = null)
+    {
+        var staff = await _staffRepository.GetWithScheduleAsync(staffId)
+            ?? throw new KeyNotFoundException($"Staff {staffId} not found.");
+
+        var toDate = to ?? DateOnly.FromDateTime(DateTime.UtcNow);
+        var fromDate = from ?? toDate.AddDays(-30);
+
+        var totalMinutes = 0.0;
+        for (var date = fromDate; date <= toDate; date = date.AddDays(1))
+        {
+            foreach (var wh in staff.WorkingHours.Where(w => w.DayOfWeek == date.DayOfWeek))
+                totalMinutes += (wh.EndTime - wh.StartTime).TotalMinutes;
+        }
+
+        return new StaffScheduledHoursDto(staffId, staff.Name, Math.Round(totalMinutes / 60, 2), fromDate, toDate);
     }
 }

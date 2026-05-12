@@ -11,4 +11,6 @@ public interface IStaffService
     Task<StaffResponseDto> AddWorkingHoursAsync(Guid staffId, AddWorkingHoursDto dto);
     Task<StaffResponseDto> AddBreakTimeAsync(Guid staffId, AddBreakTimeDto dto);
     Task DeactivateAsync(Guid id);
+    Task<StaffAppointmentSummaryDto> GetAppointmentSummaryAsync(Guid staffId, DateOnly? from = null, DateOnly? to = null);
+    Task<StaffScheduledHoursDto> GetScheduledHoursAsync(Guid staffId, DateOnly? from = null, DateOnly? to = null);
 }
