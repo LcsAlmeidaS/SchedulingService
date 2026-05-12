@@ -8,4 +8,5 @@ public interface IAppointmentRepository : IRepository<Appointment>
     Task<IEnumerable<Appointment>> GetAppointmentsByStaffOnDateAsync(Guid staffId, DateOnly date);
     Task<IEnumerable<Appointment>> GetByCustomerAsync(Guid customerId);
     Task<bool> HasConflictAsync(Guid staffId, DateTime start, DateTime end);
+    Task<IEnumerable<Appointment>> GetCompletedByStaffInPeriodAsync(Guid staffId, DateTime from, DateTime to);
 }

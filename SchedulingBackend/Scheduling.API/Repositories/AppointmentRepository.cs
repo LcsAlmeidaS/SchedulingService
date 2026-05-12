@@ -53,4 +53,16 @@ public class AppointmentRepository : Repository<Appointment>, IAppointmentReposi
                 start < a.EndTime &&
                 end > a.StartTime);
     }
+
+    public async Task<IEnumerable<Appointment>> GetCompletedByStaffInPeriodAsync(Guid staffId, DateTime from, DateTime to)
+    {
+        return await _context.Appointments
+            .AsNoTracking()
+            .Where(a =>
+                a.StaffId == staffId &&
+                a.Status == AppointmentStatus.Completed &&
+                a.StartTime >= from &&
+                a.StartTime <= to)
+            .ToListAsync();
+    }
 }
