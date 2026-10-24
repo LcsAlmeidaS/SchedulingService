@@ -132,6 +132,26 @@ SchedulingBackend/
 
 ## 🚀 Como Executar
 
+### Opção 1: Docker (recomendado)
+
+Pré-requisito: [Docker](https://docs.docker.com/get-docker/) com Docker Compose.
+
+```bash
+git clone https://github.com/LcsAlmeidaS/SchedulingService.git
+cd SchedulingService
+cp .env.example .env   # opcional: ajuste credenciais e portas
+docker compose up -d --build
+```
+
+Isso sobe o PostgreSQL e a API. As migrations são aplicadas automaticamente na inicialização (`Database__ApplyMigrationsOnStartup=true`).
+
+- API: `http://localhost:8080`
+- Swagger UI: `http://localhost:8080/swagger`
+
+Para parar: `docker compose down` (adicione `-v` para apagar também os dados do banco).
+
+### Opção 2: Execução local
+
 ### Pré-requisitos
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
