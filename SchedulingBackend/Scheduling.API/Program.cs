@@ -39,6 +39,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+#region Migrations
+if (app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+#endregion
+
 #region Middleware
 if (app.Environment.IsDevelopment())
 {
