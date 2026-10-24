@@ -32,3 +32,6 @@ publish/
 secrets.json
 appsettings.*.json
 !appsettings.json
+
+## Docker
+.env
